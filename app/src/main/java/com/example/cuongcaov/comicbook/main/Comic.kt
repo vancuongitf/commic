@@ -8,7 +8,7 @@ import java.io.Serializable
  */
 data class Comic(val storyId: Long, val storyName: String, val author: String,
                  val intro: String, val chaptersCount: Int, val numberOfChapters: Int,
-                 val updateTime: String, val status: String, val readCount: String,
+                 val updateTime: String, val status: String, var readCount: Int, var likeCount: Int,
                  val types: List<Type>, var like: Boolean, var seen: Boolean) : Serializable {
     fun getTypes(): String {
         var str = ""

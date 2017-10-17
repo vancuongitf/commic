@@ -121,6 +121,14 @@
             android:layout_marginStart="10dp"
             android:textSize="12dp" />
 
+        <TextView
+            android:id="@+id/tvSeen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:drawableStart="@drawable/ic_history_red_700_18dp"
+            android:text="@string/seen"
+            android:textSize="12dp" />
 
     </LinearLayout>
 

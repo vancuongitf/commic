@@ -67,5 +67,9 @@ class MenuAdapter(var listener: RecyclerViewOnItemClickListener) : RecyclerView.
 
     interface RecyclerViewOnItemClickListener {
         fun onItemClick(item: Any)
+
+        fun onLikeAction(storyId: Long, liked: Boolean) {
+
+        }
     }
 }

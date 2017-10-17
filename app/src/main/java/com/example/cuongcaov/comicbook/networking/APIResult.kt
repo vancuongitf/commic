@@ -16,3 +16,5 @@ data class Chapter(val chapterId: Long, val position: Int) : Serializable
 data class Content(val contentId: Long, val chapterId: Long, val position: Int, val source: String)
 
 data class ChapterContents(val nextChapter: Long, val previousChapter: Long, val contentList: List<Content>)
+
+data class APIResultLike(val status: Boolean, val count: Int)

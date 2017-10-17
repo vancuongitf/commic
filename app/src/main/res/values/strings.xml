@@ -6,4 +6,7 @@
     <string name="footerText">"%1$d / %2$d</string>
     <string name="author">Tác giả: %s</string>
     <string name="types">Thể loại: %s</string>
+    <string name="seen">Đã đọc</string>
+    <string name="search">Search</string>
+    <string name="like">Yêu thích</string>
 </resources>

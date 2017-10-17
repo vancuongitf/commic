@@ -5,7 +5,16 @@
     <item
         android:id="@+id/mnuSearch"
         android:icon="@drawable/ic_action_action_search"
-        android:title="Search"
-        app:showAsAction="always" />
+        android:title="@string/search"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/mnuRead"
+        android:title="@string/seen"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/mnuLike"
+        android:title="@string/like"
+        app:showAsAction="never" />
 
 </menu>
