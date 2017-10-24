@@ -10,10 +10,10 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
 import com.example.cuongcaov.comicbook.R
-import com.example.cuongcaov.comicbook.networking.ChapterContents
-import com.example.cuongcaov.comicbook.networking.Content
+import com.example.cuongcaov.comicbook.model.ChapterContents
+import com.example.cuongcaov.comicbook.model.Content
 import com.example.cuongcaov.comicbook.networking.RetrofitClient
-import com.example.cuongcaov.comicbook.storydetail.DetailFragment
+import com.example.cuongcaov.comicbook.detail.DetailFragment
 import kotlinx.android.synthetic.main.activity_content.*
 import retrofit2.Call
 import retrofit2.Callback

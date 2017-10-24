@@ -1,31 +1,20 @@
 package com.example.cuongcaov.comicbook.main
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
 import android.view.Menu
 import android.view.View
-import android.widget.Toast
 import com.example.cuongcaov.comicbook.R
 import com.example.cuongcaov.comicbook.base.BaseActivity
-import com.example.cuongcaov.comicbook.networking.APIResult
-import com.example.cuongcaov.comicbook.networking.RetrofitClient
-import com.example.cuongcaov.comicbook.storydetail.DetailFragment
-import com.example.cuongcaov.comicbook.storydetail.StoryDetailActivity
+import com.example.cuongcaov.comicbook.model.MenuItem
 import com.miguelcatalan.materialsearchview.MaterialSearchView
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.net.NetworkInterface
 import java.util.*
-
 
 /**
  * MainActivity.
@@ -63,82 +52,26 @@ class MainActivity : BaseActivity() {
 
     }
 
-    private val mComics = mutableListOf<Comic>()
-    private var mCurrentPage = 1
-    private var mPageCount = 1
     private var mQuery = ""
-    private var mGetByType = false
-    private var mTypeToGet: Int = 0
 
-    private var mAdapter = StoryListAdapter(mComics, getMacAddr(), object : MenuAdapter.RecyclerViewOnItemClickListener {
-        override fun onLikeAction(storyId: Long, liked: Boolean) {
-            savedStory(KEY_LIKE, storyId, liked)
-        }
-
-        override fun onItemClick(item: Any) {
-            val comic = item as? Comic
-            if (comic != null) {
-                val intent = Intent(this@MainActivity, StoryDetailActivity::class.java)
-                val bundle = Bundle()
-                savedStory(KEY_HISTORY, comic.storyId)
-                RetrofitClient.getAPIService().read(comic.storyId)
-                        .enqueue(object : Callback<Int> {
-                            override fun onFailure(call: Call<Int>?, t: Throwable?) = Unit
-
-                            override fun onResponse(call: Call<Int>?, response: Response<Int>?) {
-                                if (response?.body() != null) {
-                                    comic.readCount = response.body()!!
-                                }
-                            }
-
-                        })
-                comic.seen = true
-                comic.readCount++
-                bundle.putSerializable(DetailFragment.KEY_COMIC, comic)
-                intent.putExtras(bundle)
-                startActivity(intent)
-            }
-        }
-
-    })
     private val mMenuAdapter = MenuAdapter(object : MenuAdapter.RecyclerViewOnItemClickListener {
 
         override fun onItemClick(item: Any) {
             val menuItem = item as? MenuItem
             if (menuItem != null) {
-                tvTitle.text = menuItem.typeName
-                mGetByType = true
-                mTypeToGet = menuItem.typeId
-                mCurrentPage = 1
-                getStory()
+                replaceFragment(TypeFragment.getInstance(menuItem.typeId), menuItem.typeName)
             }
             drawerLayout.closeDrawers()
             searchView.closeSearch()
         }
     })
 
-    private val mReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            val comic = intent.extras.getSerializable(ACTION_LIKE) as? Comic
-            if (comic != null) {
-                val comic1 = mComics.find {
-                    it.storyId == comic.storyId
-                }
-                comic1?.like = comic.like
-                comic1?.likeCount = comic.likeCount
-                savedStory(KEY_LIKE, comic.storyId, comic.like)
-            }
-        }
-
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_mains)
         initView()
         initDrawer()
         onClick()
-        registerReceiver(mReceiver, IntentFilter(ACTION_LIKE))
     }
 
 
@@ -151,42 +84,34 @@ class MainActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: android.view.MenuItem): Boolean {
         when (item.itemId) {
             R.id.mnuLike -> {
+                replaceFragment(SavedFragment.getInstance(true), "Truyện yêu thích")
             }
             R.id.mnuRead -> {
+                replaceFragment(SavedFragment.getInstance(), "Truyện đã đọc")
             }
         }
         return false
     }
 
-    override fun onResume() {
-        super.onResume()
-        mAdapter.notifyDataSetChanged()
-    }
-
     private fun initView() {
         setSupportActionBar(toolbar)
         title = ""
-        recyclerViewComics.layoutManager = LinearLayoutManager(this@MainActivity)
-        recyclerViewComics.adapter = mAdapter
-        imgOpenDrawer.setOnClickListener {
-            drawerLayout.openDrawer(Gravity.START)
-        }
-        getStories()
-        swipeRefreshLayout.setOnRefreshListener {
-            getStory()
-        }
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.flMainContent, MainFragment.getInstance())
+        transaction.commit()
         searchView.setOnQueryTextListener(object : MaterialSearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                mCurrentPage = 1
                 mQuery = if (query == null) {
                     ""
                 } else {
                     "WHERE STORY_NAME LIKE '%$query%' "
                 }
-                mGetByType = false
-                mTypeToGet = 0
-                mCurrentPage = 1
-                getStory()
+                val mainFragment = supportFragmentManager.findFragmentById(R.id.flMainContent) as? MainFragment
+                if (mainFragment != null) {
+                    mainFragment.setQuery(mQuery)
+                } else {
+                    replaceFragment(MainFragment.getInstance(mQuery), getString(R.string.app_name))
+                }
                 return false
             }
 
@@ -217,163 +142,20 @@ class MainActivity : BaseActivity() {
     private fun onClick() {
 
         tvTypeAll.setOnClickListener {
-            if (mGetByType) {
-                mGetByType = false
-                mTypeToGet = 0
-                mCurrentPage = 1
+            drawerLayout.closeDrawers()
+            mMenuAdapter.deleteSelected()
+            replaceFragment(MainFragment.getInstance(), getString(R.string.app_name))
+        }
 
-                getStory()
-                drawerLayout.closeDrawers()
-                mMenuAdapter.deleteSelected()
-            }
-        }
-        imgToFirstPage.setOnClickListener {
-            if (mCurrentPage > 1) {
-                mCurrentPage = 1
-            }
-            getStory()
-        }
-        imgPreviousPage.setOnClickListener {
-            if (mCurrentPage > 1) {
-                mCurrentPage--
-            }
-            getStory()
-        }
-        imgNextPage.setOnClickListener {
-            if (mCurrentPage < mPageCount) {
-                mCurrentPage++
-            }
-            getStory()
-        }
-        imgToLastPage.setOnClickListener {
-            if (mCurrentPage < mPageCount) {
-                mCurrentPage = mPageCount
-            }
-            getStory()
+        imgOpenDrawer.setOnClickListener {
+            drawerLayout.openDrawer(Gravity.START)
         }
     }
 
-    private fun getStory() {
-        if (mGetByType) {
-            if (mTypeToGet != 0) {
-                getStoriesByType()
-            }
-        } else {
-            getStories()
-        }
+    private fun replaceFragment(fragment: Fragment, title: String) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.flMainContent, fragment)
+        transaction.commit()
+        tvTitle.text = title
     }
-
-    private fun getStories() {
-        val thread = Thread({
-            val apiService = RetrofitClient.getAPIService()
-            apiService.getStories(mCurrentPage, mQuery).enqueue(object : Callback<APIResult> {
-                override fun onResponse(call: Call<APIResult>?, response: Response<APIResult>?) {
-                    val list = response?.body()?.data
-                    val storyCount = response?.body()?.count
-                    updateFooter(storyCount)
-                    getSavedStory(KEY_LIKE)
-                    getSavedStory(KEY_HISTORY)
-                    list?.forEach {
-                        if (mLiked.contains(it.storyId.toString())) {
-                            it.like = true
-                        }
-                        if (mHistory.contains(it.storyId.toString())) {
-                            it.seen = true
-                        }
-                    }
-                    if (list != null) {
-                        runOnUiThread {
-                            mComics.clear()
-                            mComics.addAll(list)
-                            mAdapter.notifyDataSetChanged()
-                            swipeRefreshLayout.isRefreshing = false
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<APIResult>?, t: Throwable?) {
-                    runOnUiThread {
-                        Toast.makeText(this@MainActivity, "Xãy ra lỗi.", Toast.LENGTH_LONG).show()
-                        swipeRefreshLayout.isRefreshing = false
-                    }
-                }
-
-            })
-        })
-        thread.start()
-        swipeRefreshLayout.isRefreshing = true
-    }
-
-    private fun getStoriesByType() {
-        mComics.clear()
-        mAdapter.notifyDataSetChanged()
-        mCurrentPage = 1
-        updateFooter(1)
-        val thread = Thread({
-            val apiService = RetrofitClient.getAPIService()
-            apiService.getStoriesByType(mCurrentPage, mTypeToGet).enqueue(object : Callback<APIResult> {
-                override fun onResponse(call: Call<APIResult>?, response: Response<APIResult>?) {
-                    val list = response?.body()?.data
-                    val storyCount = response?.body()?.count
-                    updateFooter(storyCount)
-                    getSavedStory(KEY_LIKE)
-                    getSavedStory(KEY_HISTORY)
-                    list?.forEach {
-                        if (mLiked.contains(it.storyId.toString())) {
-                            it.like = true
-                        }
-                        if (mHistory.contains(it.storyId.toString())) {
-                            it.seen = true
-                        }
-                    }
-                    if (list != null) {
-                        runOnUiThread {
-                            mComics.clear()
-                            mComics.addAll(list)
-                            mAdapter.notifyDataSetChanged()
-                            swipeRefreshLayout.isRefreshing = false
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<APIResult>?, t: Throwable?) {
-                    Toast.makeText(this@MainActivity, "Danh sách trống.", Toast.LENGTH_LONG).show()
-                    swipeRefreshLayout.isRefreshing = false
-                }
-
-            })
-        })
-        thread.start()
-        swipeRefreshLayout.isRefreshing = true
-    }
-
-    private fun updateFooter(storyCount: Int?) {
-        mPageCount = if (storyCount == null) {
-            1
-        } else {
-            if (storyCount % 20 > 0) {
-                storyCount / 20 + 1
-            } else {
-                storyCount / 20
-            }
-
-        }
-        if (mCurrentPage < 2) {
-            imgPreviousPage.isEnabled = false
-            imgToFirstPage.isEnabled = false
-        } else {
-            imgPreviousPage.isEnabled = true
-            imgToFirstPage.isEnabled = true
-        }
-        if (mCurrentPage > mPageCount - 1) {
-            imgNextPage.isEnabled = false
-            imgToLastPage.isEnabled = false
-        } else {
-            imgNextPage.isEnabled = true
-            imgToLastPage.isEnabled = true
-        }
-        tvCurrentPage.text = getString(R.string.footerText, mCurrentPage, mPageCount)
-    }
-
-
 }

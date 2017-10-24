@@ -1,82 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rlContent"
+    android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:background="@android:color/white"
+    android:padding="5dp">
 
-    <TextView
-        android:id="@+id/tvComicName"
+    <LinearLayout
+        android:id="@+id/llMain"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ellipsize="marquee"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:freezesText="true"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:padding="2dp"
-        android:scrollHorizontally="true"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#F4511E"
-        android:textSize="18dp" />
+        android:layout_height="80dp"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/tvAuthor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvComicName"
-        android:ellipsize="marquee"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:freezesText="true"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:padding="2dp"
-        android:scrollHorizontally="true"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="16dp" />
+        <ImageView
+            android:id="@+id/imgStoryAvatar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:contentDescription="@null" />
 
-    <TextView
-        android:id="@+id/tvComicTypes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvAuthor"
-        android:ellipsize="marquee"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:freezesText="true"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:padding="2dp"
-        android:scrollHorizontally="true"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="14dp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp">
 
-    <TextView
-        android:id="@+id/tvNumOfChapters"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvComicTypes"
-        android:padding="2dp"
-        android:textSize="12dp" />
+            <TextView
+                android:id="@+id/tvComicName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:freezesText="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:padding="2dp"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#F4511E"
+                android:textSize="18dp" />
 
-    <TextView
-        android:id="@+id/tvStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvComicTypes"
-        android:layout_toEndOf="@id/tvNumOfChapters"
-        android:gravity="end"
-        android:padding="2dp"
-        android:textSize="12dp" />
+            <TextView
+                android:id="@+id/tvAuthor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvComicName"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:freezesText="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:padding="2dp"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/tvComicTypes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvAuthor"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:freezesText="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:padding="2dp"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/tvNumOfChapters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvComicTypes"
+                android:padding="2dp"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvComicTypes"
+                android:layout_toEndOf="@id/tvNumOfChapters"
+                android:gravity="end"
+                android:padding="2dp"
+                android:textSize="12dp" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/llFooter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvStatus"
+        android:layout_below="@id/llMain"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:layout_marginTop="5dp"
         android:padding="2dp">
 
         <ImageView

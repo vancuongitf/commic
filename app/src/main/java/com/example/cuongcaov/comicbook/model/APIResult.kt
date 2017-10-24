@@ -1,6 +1,5 @@
-package com.example.cuongcaov.comicbook.networking
+package com.example.cuongcaov.comicbook.model
 
-import com.example.cuongcaov.comicbook.main.Comic
 import java.io.Serializable
 
 /**
@@ -18,3 +17,12 @@ data class Content(val contentId: Long, val chapterId: Long, val position: Int, 
 data class ChapterContents(val nextChapter: Long, val previousChapter: Long, val contentList: List<Content>)
 
 data class APIResultLike(val status: Boolean, val count: Int)
+
+data class AvatarResult(val path: String)
+
+data class NameResult(val status: Boolean)
+
+data class Comment(val macAddress: String, val userName: String, val avatar: String,
+                   val comment: String, val time: String)
+
+data class StatusResult(val status: Boolean)

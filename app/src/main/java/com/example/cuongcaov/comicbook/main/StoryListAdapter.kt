@@ -6,8 +6,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.example.cuongcaov.comicbook.R
-import com.example.cuongcaov.comicbook.networking.APIResultLike
+import com.example.cuongcaov.comicbook.model.APIResultLike
+import com.example.cuongcaov.comicbook.model.Comic
 import com.example.cuongcaov.comicbook.networking.RetrofitClient
 import kotlinx.android.synthetic.main.item_comic.view.*
 import retrofit2.Call
@@ -80,6 +82,8 @@ class StoryListAdapter(private val mComics: List<Comic>, private val mMacAddress
                 itemView.tvStatus.text = itemView.context.getString(R.string.status, status)
                 itemView.tvLikeCount.text = likeCount.toString()
                 itemView.tvReadCount.text = readCount.toString()
+                itemView.tvCommentCount.text = commentCount.toString()
+                Glide.with(itemView.context).load(intro).into(itemView.imgStoryAvatar)
                 if (like) {
                     itemView.imgLike.setImageResource(R.drawable.ic_star_red_500_18dp)
                 } else {

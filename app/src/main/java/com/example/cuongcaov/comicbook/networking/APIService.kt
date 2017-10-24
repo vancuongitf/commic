@@ -1,5 +1,6 @@
 package com.example.cuongcaov.comicbook.networking
 
+import com.example.cuongcaov.comicbook.model.*
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -31,12 +32,29 @@ interface APIService {
 
     @POST("api-history.php")
     @FormUrlEncoded
-    fun getHistory(@Field("macAddress") macAddress: String): Call<Set<Long>>
+    fun getHistory(@Field("macAddress") macAddress: String): Call<HistoryResult>
 
     @GET("api-read.php")
     fun read(@Query("storyId") storyId: Long): Call<Int>
 
-    @POST("api-getsavedhistory.php")
+    @POST("api-savedstories.php")
     @FormUrlEncoded
-    fun getSavedHistory(@Field("list") list: String): Call<APIResult>
+    fun getSavedHistory(@Field("storyIds") storyIds: String): Call<APIResult>
+
+    @POST("api-changeavatar.php")
+    @FormUrlEncoded
+    fun changeAvatar(@Field("macAddress") macAddress: String, @Field("image") image: String): Call<AvatarResult>
+
+    @POST("api-changename.php")
+    @FormUrlEncoded
+    fun changeName(@Field("macAddress") macAddress: String, @Field("name") name: String): Call<NameResult>
+
+    @POST("api-comment.php")
+    @FormUrlEncoded
+    fun comment(@Field("storyId") storyId: Long, @Field("macAddress") macAddress: String,
+                @Field("comment") comment: String): Call<StatusResult>
+
+    @POST("api-getcomments.php")
+    @FormUrlEncoded
+    fun getComments(@Field("storyId") storyId: Long, @Field("count") count: Int): Call<List<Comment>>
 }

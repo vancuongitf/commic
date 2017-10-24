@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.cuongcaov.comicbook.R
+import com.example.cuongcaov.comicbook.model.MenuItem
 import kotlinx.android.synthetic.main.item_type_menu.view.*
 
 /**

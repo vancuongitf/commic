@@ -1,9 +1,9 @@
-package com.example.cuongcaov.comicbook.storydetail
+package com.example.cuongcaov.comicbook.detail
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import com.example.cuongcaov.comicbook.main.Comic
+import com.example.cuongcaov.comicbook.model.Comic
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -15,7 +15,7 @@ class FragmentAdapter(fm: FragmentManager, val mComic: Comic) : FragmentPagerAda
             DetailFragment.getInstance(mComic)
 
         } else {
-            CommentFragment()
+            CommentFragment.getInstance(mComic.storyId)
         }
     }
 

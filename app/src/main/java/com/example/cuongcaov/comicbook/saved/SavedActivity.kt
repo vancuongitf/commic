@@ -1,18 +1,18 @@
-package com.example.cuongcaov.comicbook.savedstory
+package com.example.cuongcaov.comicbook.saved
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import com.example.cuongcaov.comicbook.R
 import com.example.cuongcaov.comicbook.base.BaseActivity
-import com.example.cuongcaov.comicbook.main.Comic
+import com.example.cuongcaov.comicbook.model.Comic
 import com.example.cuongcaov.comicbook.main.MainActivity
 import com.example.cuongcaov.comicbook.main.MenuAdapter
 import com.example.cuongcaov.comicbook.main.StoryListAdapter
-import com.example.cuongcaov.comicbook.networking.APIResult
+import com.example.cuongcaov.comicbook.model.APIResult
 import com.example.cuongcaov.comicbook.networking.RetrofitClient
-import com.example.cuongcaov.comicbook.storydetail.DetailFragment
-import com.example.cuongcaov.comicbook.storydetail.StoryDetailActivity
+import com.example.cuongcaov.comicbook.detail.DetailFragment
+import com.example.cuongcaov.comicbook.detail.DetailActivity
 import kotlinx.android.synthetic.main.activity_saved.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -37,7 +37,7 @@ class SavedActivity : BaseActivity() {
         override fun onItemClick(item: Any) {
             val comic = item as? Comic
             if (comic != null) {
-                val intent = Intent(this@SavedActivity, StoryDetailActivity::class.java)
+                val intent = Intent(this@SavedActivity, DetailActivity::class.java)
                 val bundle = Bundle()
                 savedStory(KEY_HISTORY, comic.storyId)
                 RetrofitClient.getAPIService().read(comic.storyId)

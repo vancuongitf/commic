@@ -1,24 +1,26 @@
-package com.example.cuongcaov.comicbook.storydetail
+package com.example.cuongcaov.comicbook.detail
 
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.example.cuongcaov.comicbook.R
 import com.example.cuongcaov.comicbook.content.ContentActivity
-import com.example.cuongcaov.comicbook.main.Comic
 import com.example.cuongcaov.comicbook.main.MainActivity
 import com.example.cuongcaov.comicbook.main.MenuAdapter
-import com.example.cuongcaov.comicbook.networking.APIResultChapter
-import com.example.cuongcaov.comicbook.networking.APIResultLike
-import com.example.cuongcaov.comicbook.networking.Chapter
+import com.example.cuongcaov.comicbook.model.APIResultChapter
+import com.example.cuongcaov.comicbook.model.APIResultLike
+import com.example.cuongcaov.comicbook.model.Chapter
+import com.example.cuongcaov.comicbook.model.Comic
 import com.example.cuongcaov.comicbook.networking.RetrofitClient
 import kotlinx.android.synthetic.main.fragment_story_detail.view.*
 import kotlinx.android.synthetic.main.item_comic.view.*
@@ -47,6 +49,7 @@ class DetailFragment : Fragment() {
     }
 
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var mRecyclerViewChapters: RecyclerView
     private lateinit var mImgToFirstPage: ImageView
     private lateinit var mImgPrevious: ImageView
     private lateinit var mImgNext: ImageView
@@ -70,8 +73,8 @@ class DetailFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val itemView = LayoutInflater.from(context).inflate(R.layout.fragment_story_detail, container, false)
-
         mSwipeRefreshLayout = itemView.swipeRefreshLayout
+        mRecyclerViewChapters = itemView.recyclerViewChapters
         mImgToFirstPage = itemView.imgToFirstPage
         mImgPrevious = itemView.imgPreviousPage
         mImgNext = itemView.imgNextPage
@@ -90,6 +93,8 @@ class DetailFragment : Fragment() {
             itemView.tvStatus.text = itemView.context.getString(R.string.status, status)
             itemView.tvLikeCount.text = likeCount.toString()
             itemView.tvReadCount.text = readCount.toString()
+            itemView.tvCommentCount.text = commentCount.toString()
+            Glide.with(context).load(intro).into(itemView.imgStoryAvatar)
             if (like) {
                 itemView.imgLike.setImageResource(R.drawable.ic_star_red_500_18dp)
             } else {
@@ -101,7 +106,7 @@ class DetailFragment : Fragment() {
                 itemView.tvSeen.visibility = View.GONE
             }
         }
-        itemView.recyclerViewChapters.layoutManager = LinearLayoutManager(context)
+        mRecyclerViewChapters.layoutManager = LinearLayoutManager(context)
         mAdapter = ChapterListAdapter(mChapters, object : MenuAdapter.RecyclerViewOnItemClickListener {
             override fun onItemClick(item: Any) {
                 val chapter = item as? Chapter
@@ -141,6 +146,7 @@ class DetailFragment : Fragment() {
                                     mChapters.addAll(apiResultChapter.data)
                                     mAdapter?.notifyDataSetChanged()
                                     mSwipeRefreshLayout.isRefreshing = false
+                                    mRecyclerViewChapters.scrollToPosition(0)
                                 }
                             }
                         }

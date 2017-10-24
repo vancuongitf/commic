@@ -1,4 +1,4 @@
-package com.example.cuongcaov.comicbook.main
+package com.example.cuongcaov.comicbook.model
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.

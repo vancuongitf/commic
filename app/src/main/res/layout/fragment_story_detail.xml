@@ -8,11 +8,13 @@
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
         <android.support.v7.widget.RecyclerView
+            android:background="@android:color/white"
             android:id="@+id/recyclerViewChapters"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

@@ -1,4 +1,4 @@
-package com.example.cuongcaov.comicbook.storydetail
+package com.example.cuongcaov.comicbook.detail
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.cuongcaov.comicbook.R
 import com.example.cuongcaov.comicbook.main.MenuAdapter
-import com.example.cuongcaov.comicbook.networking.Chapter
+import com.example.cuongcaov.comicbook.model.Chapter
 import kotlinx.android.synthetic.main.item_chapter.view.*
 
 /**

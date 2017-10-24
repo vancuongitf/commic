@@ -9,4 +9,12 @@
     <string name="seen">Đã đọc</string>
     <string name="search">Search</string>
     <string name="like">Yêu thích</string>
+    <string name="comment">Gửi</string>
+    <string name="nonComment">Chưa có bình luận</string>
+    <string name="crop_error">Crop không thành công.</string>
+    <string name="choose_action">Chọn ảnh từ</string>
+    <string-array name="pick_image_chooser">
+        <item>Gallery</item>
+        <item>Camera</item>
+    </string-array>
 </resources>

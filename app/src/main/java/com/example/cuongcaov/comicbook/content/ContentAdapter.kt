@@ -3,7 +3,7 @@ package com.example.cuongcaov.comicbook.content
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import com.example.cuongcaov.comicbook.networking.Content
+import com.example.cuongcaov.comicbook.model.Content
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.

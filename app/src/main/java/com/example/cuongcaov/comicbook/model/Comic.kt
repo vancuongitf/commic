@@ -1,4 +1,4 @@
-package com.example.cuongcaov.comicbook.main
+package com.example.cuongcaov.comicbook.model
 
 import java.io.Serializable
 
@@ -9,7 +9,7 @@ import java.io.Serializable
 data class Comic(val storyId: Long, val storyName: String, val author: String,
                  val intro: String, val chaptersCount: Int, val numberOfChapters: Int,
                  val updateTime: String, val status: String, var readCount: Int, var likeCount: Int,
-                 val types: List<Type>, var like: Boolean, var seen: Boolean) : Serializable {
+                 var commentCount: Int, val types: List<Type>, var like: Boolean, var seen: Boolean) : Serializable {
     fun getTypes(): String {
         var str = ""
         types.forEach {

@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity
 import com.example.cuongcaov.comicbook.R
 import com.example.cuongcaov.comicbook.base.BaseActivity
 import com.example.cuongcaov.comicbook.main.MainActivity
+import com.example.cuongcaov.comicbook.model.HistoryResult
+import com.example.cuongcaov.comicbook.model.User
 import com.example.cuongcaov.comicbook.networking.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,6 +24,23 @@ class SplashActivity : AppCompatActivity() {
 
     companion object {
         private const val KEY_DATA_LOADED = "loaded"
+        private const val KEY_USER_NAME = "user_name"
+        private const val KEY_AVATAR = "avatar"
+        private const val KEY_MAC_ADDRESS = "mac_address"
+
+        fun saveUser(shared: SharedPreferences, user: User) {
+            val editor = shared.edit()
+            editor.putString(KEY_USER_NAME, user.name)
+            editor.putString(KEY_AVATAR, user.avatar)
+            editor.putString(KEY_MAC_ADDRESS, user.macAddress)
+            editor.apply()
+        }
+
+        fun getUser(shared: SharedPreferences): User {
+            return User(shared.getString(KEY_USER_NAME, "Bạn đọc"),
+                    shared.getString(KEY_MAC_ADDRESS, ""),
+                    shared.getString(KEY_AVATAR, "non-avatar"))
+        }
     }
 
     private lateinit var mShared: SharedPreferences
@@ -40,9 +59,14 @@ class SplashActivity : AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java)
         if (!mShared.getBoolean(KEY_DATA_LOADED, false)) {
             RetrofitClient.getAPIService().getHistory(MainActivity.getMacAddr())
-                    .enqueue(object : Callback<Set<Long>> {
-                        override fun onResponse(call: Call<Set<Long>>?, response: Response<Set<Long>>?) {
-                            val likeSet = response?.body()
+                    .enqueue(object : Callback<HistoryResult> {
+                        override fun onResponse(call: Call<HistoryResult>?, response: Response<HistoryResult>?) {
+                            val user = response?.body()?.user
+                            if (user != null) {
+                                saveUser(mShared, user)
+                            }
+
+                            val likeSet = response?.body()?.favorite
                             if (likeSet != null) {
                                 val editor = mShared.edit()
                                 editor.putString(BaseActivity.KEY_LIKE, likeSet.toString())
@@ -52,7 +76,7 @@ class SplashActivity : AppCompatActivity() {
                             }
                         }
 
-                        override fun onFailure(call: Call<Set<Long>>?, t: Throwable?) {
+                        override fun onFailure(call: Call<HistoryResult>?, t: Throwable?) {
                             startActivity(intent)
                         }
 
