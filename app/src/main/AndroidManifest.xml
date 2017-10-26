@@ -11,14 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.MainActivity" />
-        <activity android:name=".detail.DetailActivity" />
-        <activity
-            android:name=".content.ContentActivity"
-            android:noHistory="true"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".splash.SplashActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,6 +21,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".main.MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity
+            android:name=".detail.DetailActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity
+            android:name=".content.ContentActivity"
+            android:noHistory="true"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".saved.SavedActivity" />
     </application>
 
