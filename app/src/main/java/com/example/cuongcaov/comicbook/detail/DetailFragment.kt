@@ -22,6 +22,9 @@ import com.example.cuongcaov.comicbook.model.APIResultLike
 import com.example.cuongcaov.comicbook.model.Chapter
 import com.example.cuongcaov.comicbook.model.Comic
 import com.example.cuongcaov.comicbook.networking.RetrofitClient
+import com.example.cuongcaov.comicbook.ultis.Constants
+import com.example.cuongcaov.comicbook.ultis.Constants.KEY_CHAPTER_ID
+import com.example.cuongcaov.comicbook.ultis.Constants.KEY_COMIC
 import kotlinx.android.synthetic.main.fragment_story_detail.view.*
 import kotlinx.android.synthetic.main.item_comic.view.*
 import retrofit2.Call
@@ -36,13 +39,10 @@ class DetailFragment : Fragment() {
 
     companion object {
 
-        const val KEY_COMIC = "comic"
-        const val KEY_CHAPTER_ID = "storyId"
-
         fun getInstance(comic: Comic): DetailFragment {
             val detailFragment = DetailFragment()
             val bundle = Bundle()
-            bundle.putSerializable(KEY_COMIC, comic)
+            bundle.putSerializable(Constants.KEY_COMIC, comic)
             detailFragment.arguments = bundle
             return detailFragment
         }

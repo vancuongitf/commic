@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.example.cuongcaov.comicbook.R
+import com.example.cuongcaov.comicbook.ultis.Constants
 import kotlinx.android.synthetic.main.fragment_content.view.*
 
 /**
@@ -16,14 +17,12 @@ import kotlinx.android.synthetic.main.fragment_content.view.*
 class ContentFragment : Fragment() {
 
     companion object {
-        private const val KEY_SOURCE = "source"
-        private const val KEY_POSITION = "position"
 
         fun getNewInstance(source: String, position: Int, showNextArrow: Boolean, showPreviousArrow: Boolean, listener: ContentAdapter.OnItemClick): ContentFragment {
             val contentFragment = ContentFragment()
             val bundle = Bundle()
-            bundle.putString(KEY_SOURCE, source)
-            bundle.putInt(KEY_POSITION, position)
+            bundle.putString(Constants.KEY_SOURCE, source)
+            bundle.putInt(Constants.KEY_POSITION, position)
             contentFragment.setListener(listener)
             contentFragment.mShowNextArrow = showNextArrow
             contentFragment.mShowPreviousArrow = showPreviousArrow
@@ -40,8 +39,8 @@ class ContentFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mPosition = arguments.getInt(KEY_POSITION)
-        mSource = arguments.getString(KEY_SOURCE)
+        mPosition = arguments.getInt(Constants.KEY_POSITION)
+        mSource = arguments.getString(Constants.KEY_SOURCE)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

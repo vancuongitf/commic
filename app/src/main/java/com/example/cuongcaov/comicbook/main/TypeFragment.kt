@@ -2,9 +2,9 @@ package com.example.cuongcaov.comicbook.main
 
 import android.os.Bundle
 import android.widget.Toast
-import com.example.cuongcaov.comicbook.base.BaseActivity
 import com.example.cuongcaov.comicbook.model.APIResult
 import com.example.cuongcaov.comicbook.networking.RetrofitClient
+import com.example.cuongcaov.comicbook.ultis.Constants
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,12 +20,10 @@ class TypeFragment : BaseFragment() {
 
     companion object {
 
-        const val KEY_TYPE_ID = "typeId"
-
         fun getInstance(typeId: Int): TypeFragment {
             val instance = TypeFragment()
             val bundle = Bundle()
-            bundle.putInt(KEY_TYPE_ID, typeId)
+            bundle.putInt(Constants.KEY_TYPE_ID, typeId)
             instance.arguments = bundle
             return instance
         }
@@ -33,7 +31,7 @@ class TypeFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mTypeId = arguments.getInt(KEY_TYPE_ID)
+        mTypeId = arguments.getInt(Constants.KEY_TYPE_ID)
     }
 
     override fun getStories() {
@@ -47,8 +45,8 @@ class TypeFragment : BaseFragment() {
                     mComicCount = storyCount
                 }
                 updateFooter()
-                getSavedStory(BaseActivity.KEY_LIKE)
-                getSavedStory(BaseActivity.KEY_HISTORY)
+                getSavedStory(Constants.KEY_LIKE)
+                getSavedStory(Constants.KEY_HISTORY)
                 list?.forEach {
                     if (mLiked.contains(it.storyId.toString())) {
                         it.like = true

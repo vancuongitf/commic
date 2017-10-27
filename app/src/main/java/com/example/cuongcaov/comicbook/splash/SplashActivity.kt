@@ -7,11 +7,11 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.example.cuongcaov.comicbook.R
-import com.example.cuongcaov.comicbook.base.BaseActivity
 import com.example.cuongcaov.comicbook.main.MainActivity
 import com.example.cuongcaov.comicbook.model.HistoryResult
 import com.example.cuongcaov.comicbook.model.User
 import com.example.cuongcaov.comicbook.networking.RetrofitClient
+import com.example.cuongcaov.comicbook.ultis.Constants
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -50,7 +50,7 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        mShared = getSharedPreferences(BaseActivity.SHARED_NAME, Context.MODE_PRIVATE)
+        mShared = getSharedPreferences(Constants.SHARED_NAME, Context.MODE_PRIVATE)
         mProgressDialog = ProgressDialog(this)
         mProgressDialog.setTitle("Load dữ liệu.")
         mProgressDialog.setCancelable(false)
@@ -69,7 +69,7 @@ class SplashActivity : AppCompatActivity() {
                             val likeSet = response?.body()?.favorite
                             if (likeSet != null) {
                                 val editor = mShared.edit()
-                                editor.putString(BaseActivity.KEY_LIKE, likeSet.toString())
+                                editor.putString(Constants.KEY_LIKE, likeSet.toString())
                                 editor.putBoolean(KEY_DATA_LOADED, true)
                                 editor.apply()
                                 startActivity(intent)

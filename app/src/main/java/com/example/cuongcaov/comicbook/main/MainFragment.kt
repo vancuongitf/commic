@@ -3,9 +3,9 @@ package com.example.cuongcaov.comicbook.main
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import com.example.cuongcaov.comicbook.base.BaseActivity
 import com.example.cuongcaov.comicbook.model.APIResult
 import com.example.cuongcaov.comicbook.networking.RetrofitClient
+import com.example.cuongcaov.comicbook.ultis.Constants
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,12 +18,10 @@ class MainFragment : BaseFragment() {
 
     companion object {
 
-        const val KEY_QUERY = "query"
-
         fun getInstance(query: String = ""): MainFragment {
             val instance = MainFragment()
             val bundle = Bundle()
-            bundle.putString(KEY_QUERY, query)
+            bundle.putString(Constants.KEY_QUERY, query)
             instance.arguments = bundle
             return instance
         }
@@ -33,7 +31,7 @@ class MainFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mQuery = arguments.getString(KEY_QUERY)
+        mQuery = arguments.getString(Constants.KEY_QUERY)
     }
 
     override fun onResume() {
@@ -53,8 +51,8 @@ class MainFragment : BaseFragment() {
                     mComicCount = storyCount
                 }
                 updateFooter()
-                getSavedStory(BaseActivity.KEY_LIKE)
-                getSavedStory(BaseActivity.KEY_HISTORY)
+                getSavedStory(Constants.KEY_LIKE)
+                getSavedStory(Constants.KEY_HISTORY)
                 list?.forEach {
                     if (mLiked.contains(it.storyId.toString())) {
                         it.like = true

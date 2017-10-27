@@ -12,11 +12,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.cuongcaov.comicbook.R
-import com.example.cuongcaov.comicbook.base.BaseActivity
 import com.example.cuongcaov.comicbook.detail.DetailActivity
-import com.example.cuongcaov.comicbook.detail.DetailFragment
 import com.example.cuongcaov.comicbook.model.Comic
 import com.example.cuongcaov.comicbook.networking.RetrofitClient
+import com.example.cuongcaov.comicbook.ultis.Constants
 import kotlinx.android.synthetic.main.fragment_main.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -54,7 +53,7 @@ abstract class BaseFragment : Fragment() {
                 }
                 comic1?.like = comic.like
                 comic1?.likeCount = comic.likeCount
-                savedStory(BaseActivity.KEY_LIKE, comic.storyId, comic.like)
+                savedStory(Constants.KEY_LIKE, comic.storyId, comic.like)
                 if (mIsVivible) {
                     mAdapter.notifyDataSetChanged()
                 }
@@ -65,7 +64,7 @@ abstract class BaseFragment : Fragment() {
     var mAdapter = StoryListAdapter(mComics, MainActivity.getMacAddr(),
             object : MenuAdapter.RecyclerViewOnItemClickListener {
                 override fun onLikeAction(storyId: Long, liked: Boolean) {
-                    savedStory(BaseActivity.KEY_LIKE, storyId, liked)
+                    savedStory(Constants.KEY_LIKE, storyId, liked)
                 }
 
                 override fun onItemClick(item: Any) {
@@ -73,7 +72,7 @@ abstract class BaseFragment : Fragment() {
                     if (comic != null) {
                         val intent = Intent(activity, DetailActivity::class.java)
                         val bundle = Bundle()
-                        savedStory(BaseActivity.KEY_HISTORY, comic.storyId)
+                        savedStory(Constants.KEY_HISTORY, comic.storyId)
                         RetrofitClient.getAPIService().read(comic.storyId)
                                 .enqueue(object : Callback<Int> {
                                     override fun onFailure(call: Call<Int>?, t: Throwable?) = Unit
@@ -87,7 +86,7 @@ abstract class BaseFragment : Fragment() {
                                 })
                         comic.seen = true
                         comic.readCount++
-                        bundle.putSerializable(DetailFragment.KEY_COMIC, comic)
+                        bundle.putSerializable(Constants.KEY_COMIC, comic)
                         intent.putExtras(bundle)
                         startActivity(intent)
                     }
@@ -96,9 +95,9 @@ abstract class BaseFragment : Fragment() {
             })
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mSharedPreferences = activity.getSharedPreferences(BaseActivity.SHARED_NAME, Context.MODE_PRIVATE)
-        getSavedStory(BaseActivity.KEY_LIKE)
-        getSavedStory(BaseActivity.KEY_HISTORY)
+        mSharedPreferences = activity.getSharedPreferences(Constants.SHARED_NAME, Context.MODE_PRIVATE)
+        getSavedStory(Constants.KEY_LIKE)
+        getSavedStory(Constants.KEY_HISTORY)
         mIsVivible = true
         activity.registerReceiver(mReceiver, IntentFilter(MainActivity.ACTION_LIKE))
         val itemView = inflater.inflate(R.layout.fragment_main, container, false)
@@ -132,7 +131,7 @@ abstract class BaseFragment : Fragment() {
         if (savedStory.length < 3) {
             return
         }
-        if (key == BaseActivity.KEY_LIKE) {
+        if (key == Constants.KEY_LIKE) {
             mLiked.addAll(savedStory.substring(1, savedStory.length - 1).split(", "))
         } else {
             mHistory.addAll(savedStory.substring(1, savedStory.length - 1).split(", "))
@@ -141,16 +140,16 @@ abstract class BaseFragment : Fragment() {
 
     fun savedStory(key: String, storyId: Long, liked: Boolean = false) {
         val editor = mSharedPreferences.edit()
-        if (key == BaseActivity.KEY_LIKE) {
+        if (key == Constants.KEY_LIKE) {
             if (liked) {
                 mLiked.add(storyId.toString())
             } else {
                 mLiked.remove(storyId.toString())
             }
-            editor.putString(BaseActivity.KEY_LIKE, mLiked.toString())
+            editor.putString(Constants.KEY_LIKE, mLiked.toString())
         } else {
             mHistory.add(storyId.toString())
-            editor.putString(BaseActivity.KEY_HISTORY, mHistory.toString())
+            editor.putString(Constants.KEY_HISTORY, mHistory.toString())
         }
         editor.apply()
     }

@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat
 import com.example.cuongcaov.comicbook.R
 import com.example.cuongcaov.comicbook.base.BaseActivity
 import com.example.cuongcaov.comicbook.model.Comic
+import com.example.cuongcaov.comicbook.ultis.Constants
 import kotlinx.android.synthetic.main.activity_detail.*
 
 /**
@@ -20,7 +21,7 @@ class DetailActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
-        mComic = intent.extras.getSerializable(DetailFragment.KEY_COMIC) as Comic
+        mComic = intent.extras.getSerializable(Constants.KEY_COMIC) as Comic
         initView()
     }
 

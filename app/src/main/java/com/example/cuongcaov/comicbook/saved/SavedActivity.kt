@@ -5,14 +5,14 @@ import android.os.Bundle
 import android.widget.Toast
 import com.example.cuongcaov.comicbook.R
 import com.example.cuongcaov.comicbook.base.BaseActivity
-import com.example.cuongcaov.comicbook.model.Comic
+import com.example.cuongcaov.comicbook.detail.DetailActivity
 import com.example.cuongcaov.comicbook.main.MainActivity
 import com.example.cuongcaov.comicbook.main.MenuAdapter
 import com.example.cuongcaov.comicbook.main.StoryListAdapter
 import com.example.cuongcaov.comicbook.model.APIResult
+import com.example.cuongcaov.comicbook.model.Comic
 import com.example.cuongcaov.comicbook.networking.RetrofitClient
-import com.example.cuongcaov.comicbook.detail.DetailFragment
-import com.example.cuongcaov.comicbook.detail.DetailActivity
+import com.example.cuongcaov.comicbook.ultis.Constants
 import kotlinx.android.synthetic.main.activity_saved.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,7 +31,7 @@ class SavedActivity : BaseActivity() {
     private var mCurrentPage = 1
     private var mAdapter = StoryListAdapter(mComics, MainActivity.getMacAddr(), object : MenuAdapter.RecyclerViewOnItemClickListener {
         override fun onLikeAction(storyId: Long, liked: Boolean) {
-            savedStory(KEY_LIKE, storyId, liked)
+            savedStory(Constants.KEY_LIKE, storyId, liked)
         }
 
         override fun onItemClick(item: Any) {
@@ -39,7 +39,7 @@ class SavedActivity : BaseActivity() {
             if (comic != null) {
                 val intent = Intent(this@SavedActivity, DetailActivity::class.java)
                 val bundle = Bundle()
-                savedStory(KEY_HISTORY, comic.storyId)
+                savedStory(Constants.KEY_HISTORY, comic.storyId)
                 RetrofitClient.getAPIService().read(comic.storyId)
                         .enqueue(object : Callback<Int> {
                             override fun onFailure(call: Call<Int>?, t: Throwable?) = Unit
@@ -53,7 +53,7 @@ class SavedActivity : BaseActivity() {
                         })
                 comic.seen = true
                 comic.readCount++
-                bundle.putSerializable(DetailFragment.KEY_COMIC, comic)
+                bundle.putSerializable(Constants.KEY_COMIC, comic)
                 intent.putExtras(bundle)
                 startActivity(intent)
             }
@@ -64,7 +64,7 @@ class SavedActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_saved)
-        mLikedStory = intent.extras.getBoolean(KEY_LIKE)
+        mLikedStory = intent.extras.getBoolean(Constants.KEY_LIKE)
     }
 
     private fun getSavedStory() {

@@ -2,9 +2,9 @@ package com.example.cuongcaov.comicbook.main
 
 import android.os.Bundle
 import android.widget.Toast
-import com.example.cuongcaov.comicbook.base.BaseActivity
 import com.example.cuongcaov.comicbook.model.APIResult
 import com.example.cuongcaov.comicbook.networking.RetrofitClient
+import com.example.cuongcaov.comicbook.ultis.Constants
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,12 +17,10 @@ class SavedFragment : BaseFragment() {
 
     companion object {
 
-        const val KEY_LIKED_FRAGMENT = "liked"
-
         fun getInstance(likedFragment: Boolean = false): SavedFragment {
             val instance = SavedFragment()
             val bundle = Bundle()
-            bundle.putBoolean(KEY_LIKED_FRAGMENT, likedFragment)
+            bundle.putBoolean(Constants.KEY_LIKED_FRAGMENT, likedFragment)
             instance.arguments = bundle
             return instance
         }
@@ -32,13 +30,13 @@ class SavedFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mIsLikedFragment = arguments.getBoolean(KEY_LIKED_FRAGMENT)
+        mIsLikedFragment = arguments.getBoolean(Constants.KEY_LIKED_FRAGMENT)
     }
 
     override fun getStories() {
         val savedSet = mutableSetOf<Long>()
-        getSavedStory(BaseActivity.KEY_LIKE)
-        getSavedStory(BaseActivity.KEY_HISTORY)
+        getSavedStory(Constants.KEY_LIKE)
+        getSavedStory(Constants.KEY_HISTORY)
         if (mIsLikedFragment) {
             mComicCount = mLiked.size
             mLiked.withIndex().forEach {
@@ -60,8 +58,8 @@ class SavedFragment : BaseFragment() {
                     override fun onResponse(call: Call<APIResult>?, response: Response<APIResult>?) {
                         val list = response?.body()?.data
                         updateFooter()
-                        getSavedStory(BaseActivity.KEY_LIKE)
-                        getSavedStory(BaseActivity.KEY_HISTORY)
+                        getSavedStory(Constants.KEY_LIKE)
+                        getSavedStory(Constants.KEY_HISTORY)
                         list?.forEach {
                             if (mLiked.contains(it.storyId.toString())) {
                                 it.like = true

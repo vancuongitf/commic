@@ -22,11 +22,11 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.cuongcaov.comicbook.R
-import com.example.cuongcaov.comicbook.base.BaseActivity
 import com.example.cuongcaov.comicbook.main.MainActivity
 import com.example.cuongcaov.comicbook.model.*
 import com.example.cuongcaov.comicbook.networking.RetrofitClient
 import com.example.cuongcaov.comicbook.splash.SplashActivity
+import com.example.cuongcaov.comicbook.ultis.Constants
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.fragment_comment.view.*
 import retrofit2.Call
@@ -40,14 +40,11 @@ import java.io.ByteArrayOutputStream
  */
 class CommentFragment : Fragment() {
     companion object {
-        const val KEY_STORY_ID = "storyId"
-        const val REQUEST_CODE_CROP = 22
-        const val REQUEST_CODE_GALLERY = 2
 
         fun getInstance(storyId: Long): CommentFragment {
             val instance = CommentFragment()
             val bundle = Bundle()
-            bundle.putLong(KEY_STORY_ID, storyId)
+            bundle.putLong(Constants.KEY_STORY_ID, storyId)
             instance.arguments = bundle
             return instance
         }
@@ -80,9 +77,9 @@ class CommentFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mStoryId = arguments.getLong(KEY_STORY_ID)
+        mStoryId = arguments.getLong(Constants.KEY_STORY_ID)
         mMacAddress = MainActivity.getMacAddr()
-        mShared = activity.getSharedPreferences(BaseActivity.SHARED_NAME, Context.MODE_PRIVATE)
+        mShared = activity.getSharedPreferences(Constants.SHARED_NAME, Context.MODE_PRIVATE)
         mUser = SplashActivity.getUser(mShared)
     }
 
@@ -123,14 +120,14 @@ class CommentFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE_GALLERY && resultCode == Activity.RESULT_OK) {
+        if (requestCode == Constants.REQUEST_CODE_GALLERY && resultCode == Activity.RESULT_OK) {
             val uri = data?.data
             if (uri != null) {
                 cropImage(uri)
             }
             return
         }
-        if (requestCode == REQUEST_CODE_CROP && resultCode == Activity.RESULT_OK) {
+        if (requestCode == Constants.REQUEST_CODE_CROP && resultCode == Activity.RESULT_OK) {
             val bundle = data?.extras
             if (bundle != null) {
                 val bm = bundle.getParcelable<Bitmap>("data")
@@ -162,7 +159,7 @@ class CommentFragment : Fragment() {
         mImgAvatar.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
-            startActivityForResult(intent, REQUEST_CODE_GALLERY)
+            startActivityForResult(intent, Constants.REQUEST_CODE_GALLERY)
         }
         mImgChangeName.setOnClickListener {
             if (mEditEnable) {
@@ -281,7 +278,7 @@ class CommentFragment : Fragment() {
             cropIntent.putExtra("outputX", 256)
             cropIntent.putExtra("outputY", 256)
             cropIntent.putExtra("return-data", true)
-            startActivityForResult(cropIntent, REQUEST_CODE_CROP)
+            startActivityForResult(cropIntent, Constants.REQUEST_CODE_CROP)
         } catch (e: ActivityNotFoundException) {
             val toast = Toast.makeText(context, R.string.crop_error, Toast.LENGTH_SHORT)
             toast.show()

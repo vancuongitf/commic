@@ -3,6 +3,7 @@ package com.example.cuongcaov.comicbook.content
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -10,10 +11,11 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
 import com.example.cuongcaov.comicbook.R
+import com.example.cuongcaov.comicbook.database.DbComic
 import com.example.cuongcaov.comicbook.model.ChapterContents
 import com.example.cuongcaov.comicbook.model.Content
 import com.example.cuongcaov.comicbook.networking.RetrofitClient
-import com.example.cuongcaov.comicbook.detail.DetailFragment
+import com.example.cuongcaov.comicbook.ultis.Constants
 import kotlinx.android.synthetic.main.activity_content.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -30,14 +32,22 @@ class ContentActivity : AppCompatActivity() {
     private var mChapterId = -1L
     private var mPreviousChapter = -1L
     private var mNextChapter = -1L
+    private lateinit var mDb: DbComic
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mDb = DbComic(this)
+        mDb.open()
         initView()
         with(intent.extras) {
-            mChapterId = getLong(DetailFragment.KEY_CHAPTER_ID)
+            mChapterId = getLong(Constants.KEY_CHAPTER_ID)
         }
         getContents()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mDb.close()
     }
 
     private fun initView() {
@@ -51,6 +61,14 @@ class ContentActivity : AppCompatActivity() {
     private fun getContents() {
         mContents.clear()
         mAdapter?.notifyDataSetChanged()
+        viewPagerContents.setOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) = Unit
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) = Unit
+            override fun onPageSelected(position: Int) {
+
+            }
+
+        })
         val thread = Thread({
             RetrofitClient.getAPIService().getContentList(mChapterId)
                     .enqueue(object : Callback<ChapterContents> {
@@ -114,7 +132,7 @@ class ContentActivity : AppCompatActivity() {
             override fun onClick(dialog: DialogInterface, which: Int) {
                 val intent = Intent(this@ContentActivity, ContentActivity::class.java)
                 val bundle = Bundle()
-                bundle.putLong(DetailFragment.KEY_CHAPTER_ID, chapterId)
+                bundle.putLong(Constants.KEY_CHAPTER_ID, chapterId)
                 intent.putExtras(bundle)
                 this@ContentActivity.startActivity(intent)
             }

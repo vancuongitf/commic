@@ -13,14 +13,9 @@ import com.example.cuongcaov.comicbook.ultis.Constants
  * Copyright © 2017 Asian Tech Co., Ltd.
  * Created by cuongcaov on 26/10/2017
  */
-class DbComic : Activity {
+class DbComic(val mContext: Context) : Activity() {
     private lateinit var mDb: SQLiteDatabase
     private lateinit var mOpenHelper: ComicOpenHelper
-    private lateinit var mContext: Context
-
-    constructor(context: Context) {
-        mContext = context
-    }
 
     fun open(): DbComic {
         mOpenHelper = ComicOpenHelper(mContext)
