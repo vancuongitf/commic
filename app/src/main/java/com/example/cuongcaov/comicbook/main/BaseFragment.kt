@@ -142,13 +142,21 @@ abstract class BaseFragment : Fragment() {
         val editor = mSharedPreferences.edit()
         if (key == Constants.KEY_LIKE) {
             if (liked) {
-                mLiked.add(storyId.toString())
+                mLiked.remove(storyId.toString())
+                val list = mLiked.toMutableList()
+                list.add(0, storyId.toString())
+                mLiked.clear()
+                mLiked.addAll(list)
             } else {
                 mLiked.remove(storyId.toString())
             }
             editor.putString(Constants.KEY_LIKE, mLiked.toString())
         } else {
-            mHistory.add(storyId.toString())
+            mHistory.remove(storyId.toString())
+            val list = mHistory.toMutableList()
+            list.add(0, storyId.toString())
+            mHistory.clear()
+            mHistory.addAll(list)
             editor.putString(Constants.KEY_HISTORY, mHistory.toString())
         }
         editor.apply()

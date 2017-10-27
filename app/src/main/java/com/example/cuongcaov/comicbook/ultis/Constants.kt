@@ -17,7 +17,7 @@ object Constants {
     const val KEY_HISTORY = "history"
     const val KEY_LIKE = "like"
     const val KEY_COMIC = "comic"
-    const val KEY_CHAPTER_ID = "storyId"
+    const val KEY_CHAPTER_ID = "chapterId"
     const val DATABASE_NAME = "dbComic"
     const val DATABASE_VERSION = 1
     const val TABLE_HISTORY = "tbHistory"

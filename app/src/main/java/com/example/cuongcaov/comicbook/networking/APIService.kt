@@ -19,9 +19,6 @@ interface APIService {
     @GET("api-chapters.php")
     fun getChapterList(@Query("storyId") storyId: Long, @Query("page") page: Int): Call<APIResultChapter>
 
-    @GET("api-contents.php")
-    fun getContents(@Query("chapterId") chapterId: Long): Call<List<Content>>
-
     @GET("api-getcontents.php")
     fun getContentList(@Query("chapterId") chapterId: Long): Call<ChapterContents>
 

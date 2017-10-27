@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.cuongcaov.comicbook.R
 import com.example.cuongcaov.comicbook.content.ContentActivity
+import com.example.cuongcaov.comicbook.database.DbComic
 import com.example.cuongcaov.comicbook.main.MainActivity
 import com.example.cuongcaov.comicbook.main.MenuAdapter
 import com.example.cuongcaov.comicbook.model.APIResultChapter
@@ -23,8 +25,6 @@ import com.example.cuongcaov.comicbook.model.Chapter
 import com.example.cuongcaov.comicbook.model.Comic
 import com.example.cuongcaov.comicbook.networking.RetrofitClient
 import com.example.cuongcaov.comicbook.ultis.Constants
-import com.example.cuongcaov.comicbook.ultis.Constants.KEY_CHAPTER_ID
-import com.example.cuongcaov.comicbook.ultis.Constants.KEY_COMIC
 import kotlinx.android.synthetic.main.fragment_story_detail.view.*
 import kotlinx.android.synthetic.main.item_comic.view.*
 import retrofit2.Call
@@ -58,6 +58,7 @@ class DetailFragment : Fragment() {
     private lateinit var mImgLike: ImageView
     private lateinit var mTvLikeCount: TextView
 
+    private lateinit var mDb: DbComic
     private lateinit var mComic: Comic
     private var mChapters: MutableList<Chapter> = mutableListOf()
     private var mChapterCount = 0
@@ -67,7 +68,9 @@ class DetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mComic = arguments.getSerializable(KEY_COMIC) as Comic
+        mDb = DbComic(context)
+        mDb.open()
+        mComic = arguments.getSerializable(Constants.KEY_COMIC) as Comic
     }
 
 
@@ -113,7 +116,8 @@ class DetailFragment : Fragment() {
                 if (chapter != null) {
                     val intent = Intent(activity, ContentActivity::class.java)
                     val bundle = Bundle()
-                    bundle.putLong(KEY_CHAPTER_ID, chapter.chapterId)
+                    bundle.putLong(Constants.KEY_STORY_ID, mComic.storyId)
+                    bundle.putLong(Constants.KEY_CHAPTER_ID, chapter.chapterId)
                     intent.putExtras(bundle)
                     startActivity(intent)
                 }
@@ -123,7 +127,25 @@ class DetailFragment : Fragment() {
         itemView.recyclerViewChapters.adapter = mAdapter
         getChapterList()
         onClick()
+        itemView.swipeRefreshLayout.setOnRefreshListener {
+            getChapterList()
+        }
+        val history = mDb.getHistoryById(mComic.storyId)
+        if (history != null) {
+            val intent = Intent(activity, ContentActivity::class.java)
+            val bundle = Bundle()
+            bundle.putLong(Constants.KEY_STORY_ID, mComic.storyId)
+            bundle.putLong(Constants.KEY_CHAPTER_ID, history.chapterId)
+            bundle.putInt(Constants.KEY_POSITION, history.position)
+            intent.putExtras(bundle)
+            showDialog(intent)
+        }
         return itemView
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        mDb.close()
     }
 
     private fun getChapterList() {
@@ -236,5 +258,15 @@ class DetailFragment : Fragment() {
             mImgToLastPage.isEnabled = true
         }
         mTvCurrentPage.text = getString(R.string.footerText, mCurrentPage, mPageCount)
+    }
+
+    private fun showDialog(intent: Intent) {
+        val builder = AlertDialog.Builder(context)
+        builder.setPositiveButton("Ok") { _, _ ->
+            activity.startActivity(intent)
+        }.setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+        builder.setTitle("Đọc tiếp.")
+        builder.setMessage("Bạn có muốn tiếp tục đọc từ lần trước.")
+        builder.create().show()
     }
 }

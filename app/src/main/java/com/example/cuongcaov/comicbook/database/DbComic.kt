@@ -30,6 +30,7 @@ class DbComic(val mContext: Context) : Activity() {
     fun insertHistory(history: History): Boolean {
         val contentValue = ContentValues()
         if (isExist(history.storyId)) {
+            contentValue.put(Constants.COLUMN_STORY_ID, history.storyId)
             contentValue.put(Constants.COLUMN_CHAPTER_ID, history.chapterId)
             contentValue.put(Constants.COLUMN_POSITION, history.position)
             return mDb.update(Constants.TABLE_HISTORY, contentValue, "${Constants.COLUMN_STORY_ID} = ${history.storyId}", null) > -1
@@ -38,6 +39,18 @@ class DbComic(val mContext: Context) : Activity() {
         contentValue.put(Constants.COLUMN_CHAPTER_ID, history.chapterId)
         contentValue.put(Constants.COLUMN_POSITION, history.position)
         return mDb.insert(Constants.TABLE_HISTORY, null, contentValue) > -1
+    }
+
+    fun getHistoryById(storyId: Long): History? {
+        val query = "SELECT * FROM ${Constants.TABLE_HISTORY}" +
+                " WHERE ${Constants.COLUMN_STORY_ID} = $storyId"
+        val cursor = mDb.rawQuery(query, null)
+        if (cursor.count < 1) {
+            cursor.close()
+            return null
+        }
+        cursor.moveToFirst()
+        return History(cursor.getLong(0), cursor.getLong(1), cursor.getInt(2))
     }
 
     fun deleteHistory(storyId: Long): Boolean {
