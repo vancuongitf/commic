@@ -25,4 +25,10 @@ object Constants {
     const val COLUMN_CHAPTER_ID = "chapterId"
     const val COLUMN_POSITION = "position"
     const val COLUMN_TIME_UPDATE = "updateTime"
+    const val TABLE_OFFLINE_STORY = "offStory"
+    const val COLUMN_STORY_NAME = "storyName"
+    const val TABLE_OFFLINE_CHAPTER = "offChapter"
+    const val TABLE_OFFLINE_CONTENT = "offContent"
+    const val REQUEST_GOOGLE_SIGN_IN = 30
+
 }

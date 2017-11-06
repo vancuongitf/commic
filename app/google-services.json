@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "794560257937",
+    "project_id": "firebase-mycomic"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:794560257937:android:a977927d6ede5107",
+        "android_client_info": {
+          "package_name": "com.example.cuongcaov.comicbook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "794560257937-7k79836u71r1s3i2buovp6oo55dga5mq.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "794560257937-5jjhfv84pkr582746k266aaiedd0oaet.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cuongcaov.comicbook",
+            "certificate_hash": "f3dfe2c8da12fb78b138e453050adc6cd50ffe6e"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgzOwUecEfYv9_JPhA42EHlBFTmUmroj8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
